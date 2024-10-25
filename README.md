@@ -1,6 +1,6 @@
 # final_project
 
-Proposal：encryption
+Proposal：Secret Spy Encryption Program
 
 Group Name: Secure Bytes
 
@@ -8,7 +8,8 @@ Group member names and NetIDs
 Zihao Wang zihaow6
 Hemanth Itte hitte
 
-Project Introduction
+Project Introduction:
+
 Please provide a brief description of your project. List the goals and objectives of your project and explain why you’ve chosen to work on this project.
 Technical Overview
 Please provide a moderate-length technical description of the major components of your project. This should also function as a sort of ‘roadmap’ for tasks you need to complete for your project to be functional.
