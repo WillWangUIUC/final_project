@@ -39,7 +39,9 @@ Technical Overview:
 	
 
 Check point1 (11/8): Reading and Writing Files, Initializing the 4x4 matrix for ChaCha20
+
 Check point2 (11/22): Quarter-Round function and Block function
+
 Final phase (12/11): Key Stream function and Decryption function
 
 Potential challenges:
