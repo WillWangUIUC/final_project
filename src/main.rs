@@ -9,5 +9,6 @@ fn main() -> io::Result<()> {
     println!("{}",1);
     let mut chacha = ChaCha20::new_default();
     chacha.encrypt_file("files\\input.txt", "files\\output.txt")?;
+    chacha.decrypt_file("files\\output.txt", "files\\decrypted.txt")?;
     Ok(())
 }
