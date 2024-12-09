@@ -5,9 +5,9 @@ use std::io::prelude::*;
 use std::fs::File;
 use std::path::Path;
 
-fn main() {
-    println!(1);
+fn main() -> io::Result<()> {
+    println!("{}",1);
     let mut chacha = ChaCha20::new_default();
-    chacha.encrypt_file("files\input.txt", "files\output.txt")?;
+    chacha.encrypt_file("files\\input.txt", "files\\output.txt")?;
     Ok(())
 }
