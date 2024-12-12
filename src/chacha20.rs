@@ -124,7 +124,7 @@ impl ChaCha20{
 */
         pub fn encrypt(&mut self, data: &[u8]) -> Vec<u8> {
             let mut result = Vec::with_capacity(data.len());
-            let mut data_chunks = data.chunks(64);
+            let data_chunks = data.chunks(64);
         
             for chunk in data_chunks {
                 let keystream_block = self.block_function();
@@ -146,8 +146,10 @@ impl ChaCha20{
     
         pub fn encrypt_file(&mut self, input_path: &str, output_path: &str) -> io::Result<()> {
             let data = fs::read(input_path)?;
+            println!("Original array:");
             println!("{:?}",data);
             let encrypted = self.encrypt(&data);
+            println!("Encrypted array:");
             println!("{:?}",encrypted);
             fs::write(output_path, encrypted)?;
             Ok(())
@@ -155,8 +157,9 @@ impl ChaCha20{
     
         pub fn decrypt_file(&mut self, input_path: &str, output_path: &str) -> io::Result<()> {
             let data = fs::read(input_path)?;
-            println!("{:?}",data);
+            
             let decrypted = self.decrypt(&data);
+            println!("Decrypted array:");
             println!("{:?}",decrypted);
             fs::write(output_path, decrypted)?;
             Ok(())
