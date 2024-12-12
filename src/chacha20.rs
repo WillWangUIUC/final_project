@@ -112,31 +112,7 @@ impl ChaCha20{
         //Encryption function
         pub fn encrypt(&mut self, data: &[u8]) -> Vec<u8> {
             let mut result = Vec::with_capacity(data.len());
-<<<<<<< HEAD
             let mut data_chunks = data.chunks(64); // Process the data in 64-byte chunks
-=======
-            let mut offset = 0;
-    
-            while offset < data.len() {
-                self.state[12] = self.counter;
-                let keystream = self.block_function();
-                let chunk_size = std::cmp::min(64, data.len() - offset);
-    
-                for i in 0..chunk_size {
-                    result.push(data[offset + i] ^ keystream[i]);
-                }
-    
-                offset += 64;
-                self.counter = self.counter.wrapping_add(1);
-            }
-    
-            result
-        }
-*/
-        pub fn encrypt(&mut self, data: &[u8]) -> Vec<u8> {
-            let mut result = Vec::with_capacity(data.len());
-            let data_chunks = data.chunks(64);
->>>>>>> 9b22902c3f661f5b7c7d4a52c20442eb26b62205
         
             for chunk in data_chunks {
                 // Generate the next keystream block
@@ -162,18 +138,11 @@ impl ChaCha20{
         pub fn encrypt_file(&mut self, input_path: &str, output_path: &str) -> io::Result<()> {
             // Read file contents
             let data = fs::read(input_path)?;
-<<<<<<< HEAD
             // Helps distinguish when each process is done in the terminal
             println!("{:?}",data);
             // Encrypt the file data
             let encrypted = self.encrypt(&data); 
             // Helps distinguish when each process is done in the terminal
-=======
-            println!("Original array:");
-            println!("{:?}",data);
-            let encrypted = self.encrypt(&data);
-            println!("Encrypted array:");
->>>>>>> 9b22902c3f661f5b7c7d4a52c20442eb26b62205
             println!("{:?}",encrypted);
             //Writes the encrypted data to output file
             fs::write(output_path, encrypted)?;
@@ -184,17 +153,11 @@ impl ChaCha20{
         pub fn decrypt_file(&mut self, input_path: &str, output_path: &str) -> io::Result<()> {
             // Read file contents
             let data = fs::read(input_path)?;
-<<<<<<< HEAD
             // Helps distinguish when each process is done in the terminal
             println!("{:?}",data);
             // Encrypt the file data
             let decrypted = self.decrypt(&data);
             // Helps distinguish when each process is done in the terminal
-=======
-            
-            let decrypted = self.decrypt(&data);
-            println!("Decrypted array:");
->>>>>>> 9b22902c3f661f5b7c7d4a52c20442eb26b62205
             println!("{:?}",decrypted);
              //Writes the encrypted data to output file
             fs::write(output_path, decrypted)?;
