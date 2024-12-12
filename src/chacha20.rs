@@ -4,47 +4,48 @@ use std::io;
 
 pub struct ChaCha20{
     state: [u32; 16],
-    key: [u8; 32],
-    nonce: [u8; 12],
     counter: u32,
 }
 
 
 impl ChaCha20{
-    pub fn new(key: &[u8;32], nonce: &[u8;12]) -> Self{
+    pub fn new(key: &[u8; 32], nonce: &[u8; 12]) -> Self {
         let mut state = [0u32; 16];
         state[0] = 0x61707865; // "expa"
         state[1] = 0x3320646e; // "nd 3"
         state[2] = 0x79622d32; // "2-by"
         state[3] = 0x6b206574; // "te k"
-        for i in 0..8{
-            let start = 1*4;
+    
+        // Load the key into the state
+        for i in 0..8 {
             state[4 + i] = u32::from_le_bytes([
-                nonce[start],
-                nonce[start+1],
-                nonce[start+2],
-                nonce[start+3]
+                key[i * 4],
+                key[i * 4 + 1],
+                key[i * 4 + 2],
+                key[i * 4 + 3],
             ]);
         }
-        state[12] = 0;
-        for i in 0..3{
-            let start = 1*4;
+    
+        state[12] = 0; // Counter starts at 0
+    
+        // Load the nonce into the state
+        for i in 0..3 {
             state[13 + i] = u32::from_le_bytes([
-                nonce[start],
-                nonce[start+1],
-                nonce[start+2],
-                nonce[start+3]
+                nonce[i * 4],
+                nonce[i * 4 + 1],
+                nonce[i * 4 + 2],
+                nonce[i * 4 + 3],
             ]);
         }
-        Self{
+    
+        Self {
             state,
-            key: *key,
-            nonce: *nonce,
+    
             counter: 0,
         }
     }
     pub fn new_default() -> Self {
-            let mut random = rand::thread_rng();
+           let mut random = rand::thread_rng();
             let mut key = [0u8; 32];
             let mut nonce = [0u8; 12];
             random.fill(&mut key);
@@ -100,7 +101,7 @@ impl ChaCha20{
     
             output
         }
-    
+    /*
         pub fn encrypt(&mut self, data: &[u8]) -> Vec<u8> {
             let mut result = Vec::with_capacity(data.len());
             let mut offset = 0;
@@ -120,6 +121,23 @@ impl ChaCha20{
     
             result
         }
+*/
+        pub fn encrypt(&mut self, data: &[u8]) -> Vec<u8> {
+            let mut result = Vec::with_capacity(data.len());
+            let mut data_chunks = data.chunks(64);
+        
+            for chunk in data_chunks {
+                let keystream_block = self.block_function();
+                self.counter += 1;
+                self.state[12] = self.counter;
+        
+                for (i, &byte) in chunk.iter().enumerate() {
+                    result.push(byte ^ keystream_block[i]);
+                }
+            }
+        
+            result
+        }
     
         pub fn decrypt(&mut self, data: &[u8]) -> Vec<u8> {
             // since encryption and decryption are the same
@@ -128,16 +146,24 @@ impl ChaCha20{
     
         pub fn encrypt_file(&mut self, input_path: &str, output_path: &str) -> io::Result<()> {
             let data = fs::read(input_path)?;
+            println!("{:?}",data);
             let encrypted = self.encrypt(&data);
+            println!("{:?}",encrypted);
             fs::write(output_path, encrypted)?;
             Ok(())
         }
     
         pub fn decrypt_file(&mut self, input_path: &str, output_path: &str) -> io::Result<()> {
             let data = fs::read(input_path)?;
+            println!("{:?}",data);
             let decrypted = self.decrypt(&data);
+            println!("{:?}",decrypted);
             fs::write(output_path, decrypted)?;
             Ok(())
+        }
+        pub fn set_counter(&mut self, counter: u32) {
+            self.counter = counter;
+            self.state[12] = counter;
         }
 
 }
