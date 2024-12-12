@@ -49,7 +49,7 @@ impl ChaCha20{
             let mut key = [0u8; 32];
             let mut nonce = [0u8; 12];
             random.fill(&mut key);
-            random.fill(&mut nonce);
+           random.fill(&mut nonce);
             Self::new(&key, &nonce)
         }
     
